@@ -1,0 +1,192 @@
+external-controller: 127.0.0.1:9090
+external-ui: ./ui
+external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip"
+
+MaoDian:
+  puAuto: &puAuto
+    type: url-test
+    interval: 300
+    tolerance: 50
+
+  p1: &p1
+    type: select
+    interval: 300
+    proxies:
+      - 🚀自动选择1
+      - 🚀自动选择2
+      - 🇭🇰香港Auto
+      - 🇯🇵日本Auto
+      - 🇺🇸美国Auto
+      - 🇸🇬新加坡Auto
+      - 🇰🇷韩国Auto
+      - 🎯全球直连
+
+  p2: &p2
+    type: select
+    interval: 300
+    proxies:
+      - 🗺️国际专线
+      - 🇨🇳大陆专线
+      - 🚀自动选择1
+      - 🚀自动选择2
+      - 🇭🇰香港Auto
+      - 🇯🇵日本Auto
+      - 🇺🇸美国Auto
+      - 🇸🇬新加坡Auto
+      - 🇰🇷韩国Auto
+      - 🎯全球直连
+
+
+  ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: text }
+  domain: &domain { type: http, interval: 86400, behavior: domain, format: text }
+  domain_yaml: &domain_yaml { type: http, interval: 86400, behavior: domain, format: yaml }
+
+proxy-groups:
+  - name: 🐟漏网之鱼
+    <<: *p2
+
+  - name: 🇨🇳大陆专线
+    <<: *p1
+  - name: 🗺️国际专线
+    <<: *p1
+
+  - name: 🇬 谷歌服务
+    <<: *p2
+  - name: 🔱AIGC
+    <<: *p2
+  - name: 🎮游戏平台
+    <<: *p2
+  - name: 🎬流媒体
+    <<: *p2
+  - name: 📲外交媒体
+    <<: *p2
+  - name: Ⓜ️微软服务
+    <<: *p2
+
+  # 地区
+  - name: 🇭🇰香港Auto
+    <<: *puAuto
+    include-all-proxies: true
+    filter: "(?i)(?!直连)(港|hk|hongkong|hong kong)"
+
+  - name: 🇯🇵日本Auto
+    <<: *puAuto
+    include-all-proxies: true
+    filter: "(?i)(?!直连)(日|jp|japan)"
+
+  - name: 🇺🇸美国Auto
+    <<: *puAuto
+    include-all-proxies: true
+    filter: "(?i)(?!直连)(美|us|unitedstates|united states)"
+
+  - name: 🇸🇬新加坡Auto
+    <<: *puAuto
+    include-all-proxies: true
+    filter: "(?i)(?!直连)(新|sg|singapore)"
+
+  - name: 🇰🇷韩国Auto
+    <<: *puAuto
+    include-all-proxies: true
+    filter: "(?i)(?!直连)(韩国)"
+
+  - name: 🚀自动选择1
+    include-all-proxies: true
+    filter: "(顶级机场)"
+    <<: *puAuto
+
+  - name: 🚀自动选择2
+    include-all-proxies: true
+    filter: "(10Cloud)"
+    <<: *puAuto
+
+  - name: 🎯全球直连
+    type: select
+    proxies:
+      - DIRECT
+
+  - name: GLOBAL
+    <<: *p2
+
+rules:
+# REJECT DIRECT
+  - RULE-SET,awa,REJECT
+
+  - GEOSITE,private,🎯全球直连
+  - GEOIP,private,🎯全球直连
+  - RULE-SET,domain-direct,🎯全球直连
+  - RULE-SET,ip-direct,🎯全球直连
+  - GEOSITE,steam@cn,🎯全球直连
+
+  - RULE-SET,domain-proxy,🗺️国际专线
+  - RULE-SET,ip-proxy,🗺️国际专线
+
+  - GEOSITE,google,🇬 谷歌服务
+  - GEOSITE,google-gemini,🔱AIGC
+  - GEOSITE,openai,🔱AIGC
+
+  - GEOSITE,github,🇬 谷歌服务
+  - GEOSITE,microsoft,Ⓜ️微软服务
+
+  - GEOSITE,steam,🎮游戏平台
+  - GEOSITE,category-games,🎮游戏平台
+
+  - GEOSITE,telegram,📲外交媒体
+  - GEOIP,telegram,📲外交媒体
+
+  - GEOSITE,netflix,🎬流媒体
+  - GEOSITE,youtube,🎬流媒体
+
+  - GEOSITE,gfw,🗺️国际专线
+
+  - GEOSITE,CN,🇨🇳大陆专线
+  - GEOIP,CN,🇨🇳大陆专线
+
+  - GEOSITE,geolocation-!cn,🗺️国际专线
+  - MATCH,🐟漏网之鱼
+
+rule-providers:
+  # https://github.com/MateDevT/MyMetaRule
+  domain-proxy:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/geosite/proxy.list"
+  domain-direct:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/geosite/direct.list"
+  ip-proxy:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/geoip/proxy.list"
+  ip-direct:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/geoip/direct.list"
+
+  awa:
+    <<: *domain_yaml
+    url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.yaml"
+
+
+
+
+# dns:
+#   enable: true
+#   ipv6: true
+#   enhanced-mode: fake-ip
+#   fake-ip-range: 198.18.0.1/16
+#   fake-ip-filter:
+#     - "*"
+#     - +.lan
+#     - +.local
+#     - time.*.com
+#     - ntp.*.com
+#     - +.market.xiaomi.com
+#   use-hosts: false
+#   use-system-hosts: false
+#   nameserver:
+#     - https://doh.pub/dns-query
+#     - https://dns.alidns.com/dns-query
+#   proxy-server-nameserver:
+#     - https://doh.pub/dns-query
+#   direct-nameserver:
+#     - system
+#   respect-rules: false
+#   default-nameserver:
+#     - 223.5.5.5
