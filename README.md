@@ -1,3 +1,3 @@
 # MyMetaRule
-自定义rule文件
+这是一些rule
 
