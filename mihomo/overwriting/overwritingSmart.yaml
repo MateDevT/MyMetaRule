@@ -51,7 +51,7 @@ proxy-groups:
   - {name: 国外流量, <<: *pg_1, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Global.png}
   - {name: 国内流量, <<: *pg_1, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png}
   - {name: 谷歌服务, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Google.png}
-  - {name: FCM, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Google.png}
+  - {name: FCM, <<: *pg_2, icon: https://raw.githubusercontent.com/MateDevT/MyMetaRule/master/Icon/googlefcm.png}
   - {name: AI,     <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/AI.png}
   - {name: 游戏平台, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Game.png}
   - {name: 流媒体,   <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Streaming.png}
