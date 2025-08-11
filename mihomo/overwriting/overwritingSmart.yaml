@@ -1,0 +1,129 @@
+external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip"
+external-controller: 127.0.0.1:9090
+external-ui: ./ui
+
+BaseU: &BaseU { url: https://www.gstatic.com/generate_204, interval: 300, lazy: true}
+# BaseSmart: &BaseSmart {<<: *BaseU, type: smart, hidden: true, uselightgbm: true}
+
+Filter1: &Filter1 {filter: "(顶级机场)", include-all-proxies: true, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png}
+Filter2: &Filter2 {filter: "(10Cloud)", include-all-proxies: true, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png}
+FilterHK: &FilterHK {filter: "(?i)(?!直连)(🇭🇰|港|HK|Hong|HKG|hongkong|hong kong)", include-all-proxies: true, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png}
+FilterJP: &FilterJP {filter: "(?i)(?!直连)(🇯🇵|日|JP|Japan|NRT|HND|KIX|CTS|FUK|japan)", include-all-proxies: true, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png}
+FilterUS: &FilterUS {filter: "(?i)(?!直连)(🇺🇸|美|US|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|unitedstates|united states)", include-all-proxies: true, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png}
+FilterSG: &FilterSG {filter: "(?i)(?!直连)(🇸🇬|新|坡|SG|Sing|SIN|XSP|singapore)", include-all-proxies: true, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png}
+FilterKR: &FilterKR {filter: "(?i)(?!直连)(🇰🇷|韩|韓|首尔|南朝鲜|KR|KOR|Korea|Southkr)", include-all-proxies: true, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Korea.png}
+
+pg_1: &pg_1
+  <<: *BaseU
+  type: select
+  proxies:
+    - Smart1
+    - Smart2
+    - 香港Smart
+    - 日本Smart
+    - 美国Smart
+    - 新加坡Smart
+    - 韩国Smart
+    - 全球直连
+
+pg_2: &pg_2
+  <<: *BaseU
+  type: select
+  proxies:
+    - 国外流量
+    - 国内流量
+    - Smart1
+    - Smart2
+    - 香港Smart
+    - 日本Smart
+    - 美国Smart
+    - 新加坡Smart
+    - 韩国Smart
+    - 全球直连
+
+ip_text: &ip_text { type: http, interval: 86400, behavior: ipcidr, format: text }
+ip_yaml: &ip_yaml { type: http, interval: 86400, behavior: ipcidr, format: yaml }
+domain_text: &domain_text { type: http, interval: 86400, behavior: domain, format: text }
+domain_yaml: &domain_yaml { type: http, interval: 86400, behavior: domain, format: yaml }
+
+proxy-groups:
+  - {name: 漏网之鱼, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Final.png}
+  - {name: 国外流量, <<: *pg_1, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Global.png}
+  - {name: 国内流量, <<: *pg_1, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png}
+  - {name: 谷歌服务, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Google.png}
+  - {name: FCM, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Google.png}
+  - {name: AI,     <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/AI.png}
+  - {name: 游戏平台, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Game.png}
+  - {name: 流媒体,   <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Streaming.png}
+  - {name: 国际社交, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/PBS.png}
+  - {name: 微软服务, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png}
+
+  # 地区-Smart
+  - {name: Smart1, <<: *Filter1, type: smart}
+  - {name: Smart2, <<: *Filter2, type: smart}
+  - {name: 香港Smart, <<: *FilterHK, type: smart}
+  - {name: 日本Smart, <<: *FilterJP, type: smart}
+  - {name: 美国Smart, <<: *FilterUS, type: smart}
+  - {name: 新加坡Smart, <<: *FilterSG, type: smart}
+  - {name: 韩国Smart, <<: *FilterKR, type: smart}
+
+  # other
+  - {name: 全球直连, type: select, proxies: DIRECT, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Direct.png}
+  - {name: GLOBAL, <<: *pg_2, icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Global.png}
+
+rules:
+  # REJECT DIRECT
+  # ADS规则
+  - RULE-SET,ADS-1,REJECT
+  # 前置规则
+  - OR,((GEOSITE,private),(GEOIP,private),(RULE-SET,domain-direct),(RULE-SET,ip-direct)),国内流量
+  - OR,((RULE-SET,domain-proxy),(RULE-SET,ip-proxy)),国外流量
+
+  - GEOSITE,category-ai-!cn,AI
+#  - GEOSITE,google-gemini,AI
+#  - GEOSITE,openai,AI
+#  - DOMAIN-SUFFIX,claude.ai,AI
+#  - DOMAIN-SUFFIX,copilot.microsoft.com,AI
+
+  - GEOSITE,steam@cn,国内流量
+  - GEOSITE,microsoft@cn,国内流量
+  - GEOSITE,github,国外流量
+  - GEOSITE,microsoft,微软服务
+  - GEOSITE,category-games-!cn,游戏平台
+
+  - GEOIP,netflix,流媒体
+  - GEOSITE,netflix,流媒体
+  - GEOSITE,youtube,流媒体
+
+  - GEOSITE,telegram,国际社交
+  - GEOIP,telegram,国际社交
+
+  - GEOSITE,googlefcm,FCM
+  - GEOSITE,google,谷歌服务
+  - GEOSITE,gfw,国外流量
+
+  - GEOSITE,CN,国内流量
+  - GEOIP,CN,国内流量
+
+  - GEOSITE,geolocation-!cn,国外流量
+  - MATCH,漏网之鱼
+
+rule-providers:
+  # https://github.com/MateDevT/MyMetaRule
+
+  domain-proxy:
+    <<: *domain_text
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/geosite/proxy.list"
+  domain-direct:
+    <<: *domain_text
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/geosite/direct.list"
+  ip-proxy:
+    <<: *ip_text
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/geoip/proxy.list"
+  ip-direct:
+    <<: *ip_text
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/geoip/direct.list"
+
+  ADS-1:
+    <<: *domain_yaml
+    url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.yaml"
