@@ -1,0 +1,305 @@
+external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip"
+external-controller: 127.0.0.1:9090
+external-ui: ./ui
+
+BaseU: &BaseU {
+    url: http://www.google.com/generate_204,
+    interval: 300,
+    lazy: true,
+  }
+
+Filter1:
+  &Filter1 {
+    filter: "(?i)(顶级机场)",
+    include-all: true,
+    icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png,
+  }
+Filter2:
+  &Filter2 {
+    filter: "(?i)(10Cloud)",
+    include-all: true,
+    icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png,
+  }
+Filter3:
+  &Filter3 {
+    filter: "(?i)(自建|家宽)",
+    include-all: true,
+    icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png,
+  }
+
+FilterHK:
+  &FilterHK {
+    filter: "^(?!自建-)(?i).*?(🇭🇰|港|HK|Hong|HKG|hongkong|hong kong).*",
+    include-all: true,
+    icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png,
+  }
+FilterJP:
+  &FilterJP {
+    filter: "^(?!自建-)(?i).*?(🇯🇵|日|JP|Japan|NRT|HND|KIX|CTS|FUK|japan).*",
+    include-all: true,
+    icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png,
+  }
+FilterUS:
+  &FilterUS {
+    filter: "^(?!自建-)(?i).*?(🇺🇸|美|US|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|unitedstates|united states).*",
+    include-all: true,
+    icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png,
+  }
+FilterSG:
+  &FilterSG {
+    filter: "^(?!自建-)(?i).*?(🇸🇬|新|坡|狮城|SG|Sing|SIN|XSP|singapore).*",
+    include-all: true,
+    icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png,
+  }
+FilterKR:
+  &FilterKR {
+    filter: "^(?!自建-)(?i).*?(🇰🇷|韩|韓|首尔|南朝鲜|KR|KOR|Korea|Southkr).*",
+    include-all: true,
+    icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Korea.png,
+  }
+
+pg_1: &pg_1
+  <<: *BaseU
+  type: select
+  proxies:
+    - Auto1
+    - Auto2
+    - 香港Auto
+    - 日本Auto
+    - 美国Auto
+    - 狮城Auto
+    - 韩国Auto
+    - 精品节点
+    - 全球直连
+
+pg_2: &pg_2
+  <<: *BaseU
+  type: select
+  proxies:
+    - 国外流量
+    - 国内流量
+    - Auto1
+    - Auto2
+    - 香港Auto
+    - 日本Auto
+    - 美国Auto
+    - 狮城Auto
+    - 韩国Auto
+    - 精品节点
+    - 全球直连
+
+proxy-groups:
+  - {
+      name: 漏网之鱼,
+      <<: *pg_2,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Final.png,
+    }
+  - {
+      name: 国外流量,
+      <<: *pg_1,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Global.png,
+    }
+  - {
+      name: 国内流量,
+      <<: *pg_1,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png,
+    }
+  - {
+      name: Google,
+      <<: *pg_2,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Google.png,
+    }
+  - {
+      name: GoogleFCM,
+      <<: *pg_2,
+      icon: https://cdn.jsdelivr.net/gh/GitMetaio/Surfing@rm/Home/icon/GoogleFCM.svg,
+    }
+  - {
+      name: AI,
+      <<: *pg_2,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/AI.png,
+    }
+  - {
+      name: 游戏平台,
+      <<: *pg_2,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Game.png,
+    }
+  - {
+      name: 流媒体,
+      <<: *pg_2,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Streaming.png,
+    }
+  - {
+      name: 国际社交,
+      <<: *pg_2,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/PBS.png,
+    }
+  - {
+      name: 微软服务,
+      <<: *pg_2,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png,
+    }
+
+  # Auto
+  - { name: Auto1, <<: *Filter1, type: url-test }
+  - { name: Auto2, <<: *Filter2, type: url-test }
+  - { name: 精品节点, <<: *Filter3, type: select }
+  - { name: 香港Auto, <<: *FilterHK, type: url-test }
+  - { name: 日本Auto, <<: *FilterJP, type: url-test }
+  - { name: 美国Auto, <<: *FilterUS, type: url-test }
+  - { name: 狮城Auto, <<: *FilterSG, type: url-test }
+  - { name: 韩国Auto, <<: *FilterKR, type: url-test }
+
+  # other
+  - {
+      name: 全球直连,
+      type: select,
+      proxies: [DIRECT],
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Direct.png,
+    }
+  - {
+      name: GLOBAL,
+      <<: *pg_2,
+      icon: https://git.imee.me/https://github.com/Koolson/Qure/raw/master/IconSet/Color/Global.png,
+    }
+
+rules:
+  # IP-CIDR
+  # REJECT DIRECT
+  # ADS
+  # - RULE-SET,AWAvenue-Ads,REJECT
+
+  # 前置规则
+  - OR,((RULE-SET,private_domain),(RULE-SET,private_ip)),国内流量
+  - OR,((RULE-SET,my_direct_domain),(RULE-SET,my_direct_ip)),国内流量
+  - OR,((RULE-SET,my_proxy_domain),(RULE-SET,my_proxy_ip)),国外流量
+
+  - IP-CIDR,47.238.97.224/32,国内流量
+  - DOMAIN,account-cn-s.alibabacloud.com,国内流量
+
+  - RULE-SET,category-ai-!cn,AI
+  - RULE-SET,steam@cn,国内流量
+  - RULE-SET,category-games-!cn,游戏平台
+  - RULE-SET,github,国外流量
+  - RULE-SET,microsoft,微软服务
+
+  - RULE-SET,youtube,流媒体
+  - OR,((RULE-SET,netflix_domain),(RULE-SET,netflix_ip)),流媒体
+
+  - OR,((RULE-SET,telegram_domain),(RULE-SET,telegram_ip)),国际社交
+  - OR,((RULE-SET,twitter_domain),(RULE-SET,twitter_ip)),国际社交
+
+  - RULE-SET,googlefcm,GoogleFCM
+  - RULE-SET,google,Google
+  - RULE-SET,gfw,国外流量
+
+  - RULE-SET,geolocation-!cn,国外流量
+  - OR,((RULE-SET,cn_domain),(RULE-SET,cn_ip)),国内流量
+
+  - MATCH,漏网之鱼
+
+ip_text:
+  &ip_text { type: http, interval: 86400, behavior: ipcidr, format: text }
+ip_yaml:
+  &ip_yaml { type: http, interval: 86400, behavior: ipcidr, format: yaml }
+domain_text:
+  &domain_text { type: http, interval: 86400, behavior: domain, format: text }
+domain_yaml:
+  &domain_yaml { type: http, interval: 86400, behavior: domain, format: yaml }
+
+rule-providers:
+  # https://github.com/MateDevT/MyMetaRule
+  my_proxy_domain:
+    <<: *domain_text
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/rule/geosite/proxy.list"
+  my_proxy_ip:
+    <<: *ip_text
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/rule/geoip/proxy.list"
+  my_direct_domain:
+    <<: *domain_text
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/rule/geosite/direct.list"
+  my_direct_ip:
+    <<: *ip_text
+    url: "https://raw.githubusercontent.com/MateDevT/MyMetaRule/refs/heads/master/rule/geoip/direct.list"
+
+  private_domain:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.list"
+  private_ip:
+    <<: *ip_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.list"
+  
+
+  # ads
+  AWAvenue-Ads:
+    <<: *domain_yaml
+    url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.yaml"
+
+  # # #
+  category-ai-!cn:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-!cn.list"
+  github:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/github.list"
+  microsoft:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft.list"
+  steam:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/steam.list"
+  steam@cn:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/steam@cn.list"
+  category-games-!cn:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games-!cn.list"
+  
+  # 流媒体
+  youtube:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.list"
+  netflix_domain:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/netflix.list"
+  netflix_ip:
+    <<: *ip_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.list"
+  
+  # 社交
+  telegram_domain:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.list"
+  telegram_ip:
+    <<: *ip_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.list"
+  twitter_domain:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/twitter.list"
+  twitter_ip:
+    <<: *ip_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.list"
+  
+  # 
+  cn_domain:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.list"
+  cn_ip:
+    <<: *ip_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.list"
+  
+  # Google
+  google:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.list"
+  googlefcm:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/googlefcm.list"
+  
+  #
+  gfw:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/gfw.list"
+  geolocation-!cn:
+    <<: *domain_text
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.list"
